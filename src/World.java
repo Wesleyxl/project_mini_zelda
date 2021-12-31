@@ -5,16 +5,20 @@ import java.util.List;
 
 public class World {
 	
+	// variables
+	public static int SCALE = 1;
+	public static int WIDTH = 640, HEIGHT = 480;
+
 	public static List<Blocks> blocks = new ArrayList<Blocks>();
  
 	public World() {
 		
-		for (int x = 0; x < 15; x ++) {
+		for (int x = 0; x < 20; x ++) {
 			blocks.add(new Blocks(x * 32, 0));
 		}
 		
-		for (int x = 0; x < 15; x ++) {
-			blocks.add(new Blocks(x * 32, 480 - 32));
+		for (int x = 0; x < 20; x ++) {
+			blocks.add(new Blocks(x * 32, HEIGHT - 32));
 		}
 		
 		for (int y = 0; y < 15; y ++) {
@@ -22,7 +26,7 @@ public class World {
 		}
 		
 		for (int y = 0; y < 15; y ++) {
-			blocks.add(new Blocks(480 - 32, y * 32));
+			blocks.add(new Blocks(WIDTH - 32, y * 32));
 		}
 		
 	}

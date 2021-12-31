@@ -5,18 +5,26 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 public class Game extends Canvas implements Runnable, KeyListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	// variables
 	public static int SCALE = 1;
-	public static int WIDTH = 480, HEIGHT = 480;
+	public static int WIDTH = 640, HEIGHT = 480;
 	
-	// importa
-	public Player player;
+	// imports
+	public static Player player;
 	public World world;
+	public List<Enemy> enemies = new ArrayList<Enemy>(); 
 	
 	public Game() {
 		
@@ -26,14 +34,24 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		// screen dimension
 		this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		
+		new SpriteSheet();
+		
 		player = new Player(32, 32);
+	
 		world = new World();
+		
+		enemies.add(new Enemy(32, 32));
+		enemies.add(new Enemy(36, 50));
 		
 	}
 	
 	// logic 
 	public void tick() {
 		player.tick();
+		
+		for (int i = 0; i < enemies.size(); i ++) {
+			enemies.get(i).tick();
+		}
 	}
 	
 	// render
@@ -48,10 +66,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		
 		Graphics g = bs.getDrawGraphics();
 		
-		g.setColor(Color.black);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(new Color(0, 135, 13));
+		g.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 		
 		player.render(g);
+		for (int i = 0; i < enemies.size(); i ++) {
+			enemies.get(i).render(g);
+		}
 		world.render(g);
 		
 		bs.show();
@@ -65,12 +86,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		// set frame configurations
 		frame.add(game);
 		frame.setTitle("Mini Zelda Clone");
+		frame.setVisible(true);
 		frame.pack();
 		// set screen to center
 		frame.setLocationRelativeTo(null);
 		// close the java process on close 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		frame.setVisible(true);
 		
 		// looping
 		new Thread(game).start();
@@ -108,8 +129,13 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			player.LEFT = true;
 		}
 
+		// bullet
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.shot = true;
+		}
+		
 		// moving player to up and down
-		else if (e.getKeyCode() == KeyEvent.VK_UP) {
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			player.UP = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			player.DOWN = true;
