@@ -14,8 +14,9 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static int SCALE = 1;
 	public static int WIDTH = 480, HEIGHT = 480;
 	
-	// import Player
+	// importa
 	public Player player;
+	public World world;
 	
 	public Game() {
 		
@@ -25,7 +26,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		// screen dimension
 		this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		
-		player = new Player(1,1);
+		player = new Player(32, 32);
+		world = new World();
 		
 	}
 	
@@ -50,6 +52,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		player.render(g);
+		world.render(g);
 		
 		bs.show();
 		
